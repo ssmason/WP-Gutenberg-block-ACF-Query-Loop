@@ -93,15 +93,54 @@ class Rest
                 continue;
             }
             foreach ($group_fields as $field) {
-                $fields[] = [
-                    'key'   => $field['key'],
-                    'name'  => $field['name'],
-                    'label' => $field['label'] ?? $field['name'],
-                    'type'  => $field['type'] ?? 'text',
-                ];
+                $fields = array_merge(
+                    $fields,
+                    $this->_flattenFields($field)
+                );
             }
         }
 
         return new WP_REST_Response(['fields' => $fields], 200);
+    }
+
+    /**
+     * Flattens fields: groups are replaced by their children; children with
+     * their own sub_fields are left as-is (one level only).
+     *
+     * @param array<string, mixed> $field ACF field array.
+     *
+     * @return array<int, array<string, string>>
+     */
+    private function _flattenFields(array $field): array
+    {
+        $sub_fields = $field['sub_fields'] ?? [];
+
+        if (! empty($sub_fields)) {
+            $parent_label = $field['label'] ?? $field['name'] ?? '';
+            $result      = [];
+            foreach ($sub_fields as $sub) {
+                $label = $sub['label'] ?? $sub['name'] ?? '';
+                if ($parent_label !== '') {
+                    $label = $label . ' (' . $parent_label . ')';
+                }
+                $result[] = [
+                    'key'   => $sub['key'],
+                    'name'  => $sub['name'],
+                    'label' => $label,
+                    'type'  => $sub['type'] ?? 'text',
+                ];
+            }
+
+            return $result;
+        }
+
+        return [
+            [
+                'key'   => $field['key'],
+                'name'  => $field['name'],
+                'label' => $field['label'] ?? $field['name'],
+                'type'  => $field['type'] ?? 'text',
+            ],
+        ];
     }
 }
