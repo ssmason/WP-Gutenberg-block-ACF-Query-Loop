@@ -67,8 +67,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
     const options = [
         { value: '', label: __('— Select field —', 'satori-acf-field-loop') },
         ...fields.map((f) => ({
-            value: f.key,
-            label: `${f.label} (${f.name})`,
+            value: f.selector || f.key,
+            label: f.label,
         })),
     ];
 
@@ -103,7 +103,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
         </InspectorControls>
     );
 
-    const selectedField = fields.find((f) => f.key === fieldKey);
+    const selectedField = fields.find(
+        (f) => (f.selector || f.key) === fieldKey
+    );
     const previewLabel = selectedField
         ? `${selectedField.label} (${selectedField.name})`
         : __('Select an ACF field', 'satori-acf-field-loop');

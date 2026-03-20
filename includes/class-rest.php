@@ -107,6 +107,9 @@ class Rest
      * Flattens fields: groups are replaced by their children; children with
      * their own sub_fields are left as-is (one level only).
      *
+     * Returns a 'selector' for get_field(): top-level uses field name;
+     * sub-fields use parent_child format (e.g. job_details_about_you).
+     *
      * @param array<string, mixed> $field ACF field array.
      *
      * @return array<int, array<string, string>>
@@ -114,20 +117,26 @@ class Rest
     private function _flattenFields(array $field): array
     {
         $sub_fields = $field['sub_fields'] ?? [];
+        $parent_name = $field['name'] ?? '';
 
         if (! empty($sub_fields)) {
-            $parent_label = $field['label'] ?? $field['name'] ?? '';
+            $parent_label = $field['label'] ?? $parent_name;
             $result      = [];
             foreach ($sub_fields as $sub) {
-                $label = $sub['label'] ?? $sub['name'] ?? '';
+                $sub_name = $sub['name'] ?? '';
+                $label    = $sub['label'] ?? $sub_name;
                 if ($parent_label !== '') {
                     $label = $label . ' (' . $parent_label . ')';
                 }
+                $selector = $parent_name !== '' && $sub_name !== ''
+                    ? $parent_name . '_' . $sub_name
+                    : $sub_name;
                 $result[] = [
-                    'key'   => $sub['key'],
-                    'name'  => $sub['name'],
-                    'label' => $label,
-                    'type'  => $sub['type'] ?? 'text',
+                    'key'      => $sub['key'],
+                    'name'     => $sub_name,
+                    'selector' => $selector,
+                    'label'    => $label,
+                    'type'     => $sub['type'] ?? 'text',
                 ];
             }
 
@@ -136,10 +145,11 @@ class Rest
 
         return [
             [
-                'key'   => $field['key'],
-                'name'  => $field['name'],
-                'label' => $field['label'] ?? $field['name'],
-                'type'  => $field['type'] ?? 'text',
+                'key'      => $field['key'],
+                'name'     => $field['name'],
+                'selector' => $field['name'] ?? '',
+                'label'    => $field['label'] ?? $field['name'],
+                'type'     => $field['type'] ?? 'text',
             ],
         ];
     }
