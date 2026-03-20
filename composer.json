@@ -1,0 +1,14 @@
+{
+    "name": "ssmason/satori-acf-field-loop",
+    "description": "ACF Field block for Query Loop – output ACF fields inside patterns.",
+    "version": "1.0.0",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^4.0"
+    },
+    "scripts": {
+        "phpcs": "vendor/bin/phpcs -n .",
+        "phpcbf": "vendor/bin/phpcbf -n ."
+    }
+}

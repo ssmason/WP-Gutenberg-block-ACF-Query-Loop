@@ -1,0 +1,16 @@
+/**
+ * ACF Field block – editor styles.
+ *
+ * @package SatoriAcfFieldLoop
+ * @author  Stephen Mason <stephen@satori.digital>
+ */
+
+.satori-acf-field-block .satori-acf-field-preview {
+    display: inline-block;
+    padding: 0.5em 0.75em;
+    background: #f0f0f0;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #757575;
+}
