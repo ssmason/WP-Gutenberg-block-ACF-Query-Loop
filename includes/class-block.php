@@ -85,7 +85,13 @@ class Block
             return '';
         }
 
-        return $this->_formatValue($value, $attributes);
+        $content = $this->_formatValue($value, $attributes);
+        $wrapper = get_block_wrapper_attributes(
+            ['class' => 'satori-acf-field-block'],
+            $block
+        );
+
+        return sprintf('<div %1$s>%2$s</div>', $wrapper, $content);
     }
 
     /**

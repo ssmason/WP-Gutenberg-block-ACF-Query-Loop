@@ -8,7 +8,16 @@
   "icon": "admin-generic",
   "description": "Output an ACF field for the current post. Use inside Query Loop to display field data in patterns.",
   "supports": {
-    "html": false
+    "html": false,
+    "color": {
+      "text": true,
+      "background": true
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "textAlign": true
+    }
   },
   "attributes": {
     "fieldKey": {
