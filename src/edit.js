@@ -8,6 +8,7 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, Spinner } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
@@ -19,11 +20,28 @@ import apiFetch from '@wordpress/api-fetch';
  * @param {Object} props.attributes Block attributes.
  * @param {Function} props.setAttributes Update attributes callback.
  * @param {Object} props.context    Block context (postId, postType).
+ * @param {string} props.clientId  Block client ID.
  * @return {JSX.Element}
  */
-export default function Edit({ attributes, setAttributes, context }) {
+export default function Edit({ attributes, setAttributes, context, clientId }) {
     const { fieldKey } = attributes;
-    const postType = context?.postType || 'post';
+
+    const queryPostType = useSelect(
+        (select) => {
+            const parents = select('core/block-editor').getBlockParentsByBlockName(
+                clientId,
+                'core/query'
+            );
+            if (!parents?.length) {
+                return null;
+            }
+            const queryBlock = select('core/block-editor').getBlock(parents[0]);
+            return queryBlock?.attributes?.query?.postType ?? null;
+        },
+        [clientId]
+    );
+
+    const postType = queryPostType || context?.postType || 'post';
 
     const [fields, setFields] = useState([]);
     const [loading, setLoading] = useState(true);
