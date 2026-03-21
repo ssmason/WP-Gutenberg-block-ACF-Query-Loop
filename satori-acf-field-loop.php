@@ -35,6 +35,8 @@ require_once SATORI_ACF_FIELD_LOOP_PLUGIN_DIR . 'includes/class-plugin.php';
 
 /**
  * Boots the plugin on plugins_loaded.
+ * Flow: Autoloader → Plugin::instance() → boot() → Block::register() +
+ * Rest::register() + Assets::register().
  *
  * @return void
  */

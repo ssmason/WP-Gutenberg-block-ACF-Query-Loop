@@ -39,6 +39,14 @@ class Block
         $block_json_path = SATORI_ACF_FIELD_LOOP_PLUGIN_DIR . 'block.json';
 
         if (! file_exists($block_json_path)) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
+                trigger_error(
+                    'Satori ACF Field Loop: block.json not found.',
+                    E_USER_WARNING
+                );
+            }
+
             return;
         }
 
@@ -63,7 +71,7 @@ class Block
      */
     public function render(array $attributes, string $content, WP_Block $block): string
     {
-        $field_key = $attributes['fieldKey'] ?? '';
+        $field_key = sanitize_key((string) ($attributes['fieldKey'] ?? ''));
 
         if (empty($field_key)) {
             return '';
@@ -125,7 +133,7 @@ class Block
     private function _formatValue($value, array $attributes): string
     {
         if (is_scalar($value)) {
-            return (string) $value;
+            return wp_kses_post((string) $value);
         }
 
         if (is_array($value) && isset($value['url'])) {
