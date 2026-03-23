@@ -39,10 +39,45 @@ composer phpcs
 composer phpcbf
 ```
 
+## Testing (Cypress E2E)
+
+Cypress tests cover block settings, editor behaviour, frontend render, and the REST API.
+
+**Prerequisites**
+
+- WordPress with **ACF** and this plugin activated
+- Default admin user (`admin` / `password`) or update `cypress/support/commands.js`
+
+**Run tests**
+
+```bash
+export CYPRESS_BASE_URL=https://your-site.local
+npm run cypress:run
+npm run cypress:open   # Interactive UI
+```
+
+**Test suites**
+
+| File | Coverage |
+|------|----------|
+| `cypress/e2e/acf-field-block-settings.cy.js` | Inspector panel, field dropdown, help text |
+| `cypress/e2e/acf-field-block-editor.cy.js` | Block insertion, preview, Query Loop coexistence |
+| `cypress/e2e/acf-field-block-frontend.cy.js` | Frontend block wrapper render |
+| `cypress/e2e/acf-field-block-rest.cy.js` | REST endpoint structure |
+
 ## Structure
 
 ```
 satori-acf-field-loop/
+├── cypress/
+│   ├── e2e/                    # E2E test specs
+│   │   ├── acf-field-block-settings.cy.js
+│   │   ├── acf-field-block-editor.cy.js
+│   │   ├── acf-field-block-frontend.cy.js
+│   │   └── acf-field-block-rest.cy.js
+│   └── support/
+│       ├── commands.js
+│       └── e2e.js
 ├── block.json           # Block metadata
 ├── build/               # Compiled assets (index.js, style-index.css)
 ├── includes/
