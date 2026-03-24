@@ -41,29 +41,46 @@ composer phpcbf
 
 ## Testing (Cypress E2E)
 
-Cypress tests cover block settings, editor behaviour, frontend render, and the REST API.
+Cypress end-to-end tests cover block settings, editor behaviour, frontend render, and the REST API.
 
 **Prerequisites**
 
-- WordPress with **ACF** and this plugin activated
-- Default admin user (`admin` / `password`) or update `cypress/support/commands.js`
+- A running WordPress site with **ACF** and this plugin activated
+- An admin user (set `WP_USER` and `WP_PASSWORD` in `cypress.env.json`)
+
+**Setup (required)**
+
+1. Copy `cypress.env.json.example` to `cypress.env.json`
+2. Set `baseUrl`, `WP_USER`, and `WP_PASSWORD` to match your WordPress site
 
 **Run tests**
 
 ```bash
-export CYPRESS_BASE_URL=https://your-site.local
+# Run all tests (headless)
 npm run cypress:run
-npm run cypress:open   # Interactive UI
+
+# Open Cypress UI (interactive)
+npm run cypress:open
 ```
 
 **Test suites**
 
 | File | Coverage |
 |------|----------|
+| `cypress/e2e/login.cy.js` | WordPress login reaches wp-admin |
 | `cypress/e2e/acf-field-block-settings.cy.js` | Inspector panel, field dropdown, help text |
 | `cypress/e2e/acf-field-block-editor.cy.js` | Block insertion, preview, Query Loop coexistence |
 | `cypress/e2e/acf-field-block-frontend.cy.js` | Frontend block wrapper render |
 | `cypress/e2e/acf-field-block-rest.cy.js` | REST endpoint structure |
+
+**Environment**
+
+In `cypress.env.json`, set:
+
+- `baseUrl` – Your WordPress URL (e.g. `http://localhost:8080`)
+- `WP_USER` / `WP_PASSWORD` – Login credentials for an existing admin user
+- `WP_PATH` – WordPress path prefix: `/wp` for Bedrock, `""` for standard WP
+- `WP_REST_PREFIX` (optional) – REST API path prefix; default is `/wp-json`. Override only if your site serves the REST API at a different path (e.g. `/wp/wp-json`).
 
 ## Structure
 
@@ -71,6 +88,7 @@ npm run cypress:open   # Interactive UI
 satori-acf-field-loop/
 ├── cypress/
 │   ├── e2e/                    # E2E test specs
+│   │   ├── login.cy.js
 │   │   ├── acf-field-block-settings.cy.js
 │   │   ├── acf-field-block-editor.cy.js
 │   │   ├── acf-field-block-frontend.cy.js

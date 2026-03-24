@@ -6,3 +6,4 @@ vendor/
 # Cypress
 cypress/videos/
 cypress/screenshots/
+cypress.env.json

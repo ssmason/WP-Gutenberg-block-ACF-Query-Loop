@@ -5,11 +5,11 @@
   "scripts": {
     "build": "wp-scripts build",
     "start": "wp-scripts start",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:open": "env -u CYPRESS_CACHE_FOLDER CYPRESS_SKIP_VERIFY=true npx cypress open",
+    "cypress:run": "env -u CYPRESS_CACHE_FOLDER CYPRESS_SKIP_VERIFY=true npx cypress run"
   },
   "devDependencies": {
     "@wordpress/scripts": "^27.0.0",
-    "cypress": "^13.0.0"
+    "cypress": "13.17.0"
   }
 }
